@@ -21,7 +21,7 @@ def main(jsonfile):
     data = json.load(f)
 
     # header row
-    ws.append(['post_id', 'datetime', 'username', 'likes', 'n_comments', 'n_unique_commenters', 'n_owner_comments', 'media_link', 'caption', 'is_video'])
+    ws.append(['post_id', 'datetime', 'username', 'likes', 'n_comments', 'n_unique_commenters', 'n_owner_comments', 'media_link', 'image_filename', 'caption', 'is_video'])
 
     # Iterating through the json
     # list
@@ -53,6 +53,7 @@ def main(jsonfile):
                    n_commenters,
                    n_owner_comments,
                    '=HYPERLINK("https://www.instagram.com/p/{}", "https://www.instagram.com/p/{}")'.format(post['shortcode'], post['shortcode']),
+                   post['display_url'].split('?')[0].split('/')[-1],
                    post['edge_media_to_caption']['edges'][0]['node']['text'],
                    post['is_video']
                   ])
