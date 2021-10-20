@@ -21,7 +21,7 @@ def main(jsonfile):
     data = json.load(f)
 
     # header row
-    ws.append(['post_id', 'datetime', 'username', 'likes', 'n_comments', 'n_unique_commenters', 'n_owner_comments', 'media_link', 'image_filename', 'caption', 'is_video'])
+    ws.append(['post_id', 'datetime', 'username', 'likes', 'n_comments', 'n_unique_commenters', 'n_owner_comments', 'media_link', 'image_filename', 'is_video', 'tags', 'caption'])
 
     # Iterating through the json
     # list
@@ -45,6 +45,12 @@ def main(jsonfile):
         #print("now tabulating n_commenters")
         n_commenters = len(commenters)
 
+        caption_info = post['edge_media_to_caption'].get('edges')
+        if caption_info:
+            caption = caption_info[0]['node']['text']
+        else:
+            caption = None
+
         ws.append([post['id'],
                    datestamp,
                    post['username'],
@@ -54,8 +60,9 @@ def main(jsonfile):
                    n_owner_comments,
                    '=HYPERLINK("https://www.instagram.com/p/{}", "https://www.instagram.com/p/{}")'.format(post['shortcode'], post['shortcode']),
                    post['display_url'].split('?')[0].split('/')[-1],
-                   post['edge_media_to_caption']['edges'][0]['node']['text'],
-                   post['is_video']
+                   post['is_video'],
+                   ' '.join(post.get('tags') or []),
+                   caption
                   ])
         i = i+1
 
